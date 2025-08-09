@@ -1,28 +1,45 @@
-# Binarios compilados
+# SpaceFn Auto - Git Ignore Rules
+
+# Compiled binaries and executables
 spacefn
 *.o
 *.so
+*.a
+*.out
 
-# Archivos temporales del editor
-*.swp
-*.swo
+# Build artifacts
+*.tmp
+*.bak
+*.backup
+
+# System and OS files
+.DS_Store
+Thumbs.db
 *~
 
-# Logs y archivos de runtime (estos se crean en /var/)
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and runtime files
 *.log
 *.pid
 
-# Archivos de backup
-*.backup.*
+# Temporary files
+temp/
+tmp/
 
-# IDE files
-.vscode/
-.idea/
+# Distribution packages
+*.tar.gz
+*.zip
+*.deb
+*.rpm
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# User-specific configurations
+.spacefn-config
 
-# No versionar directorios del sistema
-# (estos se crean automáticamente en /var/)
-var/
+# Old backup files
+*_OLD.md
+*_backup.*
