@@ -42,7 +42,7 @@ start_spacefn_for_device() {
     
     # Iniciar spacefn como daemon
     cd "$SPACEFN_DIR"
-    nohup sudo "$SPACEFN_BIN" "$device" > "$logfile" 2>&1 &
+    nohup sudo "$SPACEFN_BIN" "$device" >> "$logfile" 2>&1 &
     local pid=$!
     
     # Guardar PID
@@ -114,19 +114,40 @@ status() {
     echo "=================="
     
     local running=0
-    for pidfile in "$PIDFILE_DIR"/*.pid; do
-        if [[ -f "$pidfile" ]]; then
-            local pid=$(cat "$pidfile")
-            local device=$(basename "$pidfile" .pid | sed 's/spacefn-//')
-            if kill -0 "$pid" 2>/dev/null; then
-                echo "✓ Corriendo: /dev/input/$device (PID: $pid)"
+    
+    # Buscar procesos spacefn activos directamente
+    local spacefn_processes=$(ps aux | grep -v grep | grep "$SPACEFN_BIN /dev/input")
+    
+    if [[ -n "$spacefn_processes" ]]; then
+        while IFS= read -r line; do
+            if [[ -n "$line" ]]; then
+                local pid=$(echo "$line" | awk '{print $2}')
+                local device=$(echo "$line" | grep -o '/dev/input/[^ ]*')
+                local device_display=$(basename "$device")
+                
+                # Obtener nombre del dispositivo si es posible
+                local device_name="$device_display"
+                if [[ "$device" == *"by-id"* ]]; then
+                    device_name=$(basename "$device" | sed 's/-event-kbd$//' | sed 's/usb-//' | sed 's/_/ /g')
+                fi
+                
+                echo "✓ Corriendo: $device_display ($device_name) (PID: $pid)"
                 running=$((running + 1))
-            else
-                echo "✗ No corriendo: /dev/input/$device (PID file obsoleto)"
-                sudo rm -f "$pidfile"
             fi
-        fi
-    done
+        done <<< "$spacefn_processes"
+    fi
+    
+    # También verificar archivos PID obsoletos y limpiarlos
+    if [[ -d "$PIDFILE_DIR" ]]; then
+        for pidfile in "$PIDFILE_DIR"/*.pid; do
+            if [[ -f "$pidfile" ]]; then
+                local pid=$(cat "$pidfile" 2>/dev/null)
+                if [[ -n "$pid" ]] && ! kill -0 "$pid" 2>/dev/null; then
+                    sudo rm -f "$pidfile"
+                fi
+            fi
+        done
+    fi
     
     if [[ $running -eq 0 ]]; then
         echo "No hay procesos spacefn corriendo"
