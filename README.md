@@ -1,6 +1,8 @@
 # SpaceFn-Evdev Auto
 
-Una versión mejorada y automatizada de spacefn-evdev con detección automática de múltiples teclados y gestión avanzada de procesos.
+Una versión mejorada y automatizada de [spacefn-evdev](https://github.com/abrasive/spacefn-evdev) con detección automática de múltiples teclados y gestión avanzada de procesos.
+
+> **⚠️ Importante**: Este proyecto está basado en el trabajo original de **James Laird-Wah** ([@abrasive](https://github.com/abrasive)). El repositorio original se encuentra en: https://github.com/abrasive/spacefn-evdev
 
 ## 🚀 Características
 
@@ -33,7 +35,7 @@ Este script automáticamente:
 sudo apt-get install build-essential libevdev-dev pkg-config
 
 # Compilar
-make
+cc `pkg-config --cflags libevdev` spacefn.c -o spacefn `pkg-config --libs libevdev`
 
 # Iniciar manualmente
 ./spacefn-auto.sh start
@@ -90,14 +92,17 @@ unsigned int key_map(unsigned int code) {
 ## 📁 Estructura del proyecto
 
 ```
-spacefn-evdev/
-├── spacefn.c                 # Código fuente principal
-├── spacefn                   # Binario compilado
-├── spacefn-auto.sh          # Script de gestión principal
-├── install.sh               # Instalador automatizado
-├── uninstall.sh             # Desinstalador
-├── spacefn-auto.service     # Servicio systemd
-└── Makefile                 # Configuración de compilación
+spacefn-evdev-auto/
+├── spacefn.c                 # Código fuente principal (basado en trabajo de James Laird-Wah)
+├── spacefn                   # Binario compilado (auto-generado)
+├── spacefn-auto.sh          # Script de gestión principal (nuevo)
+├── install.sh               # Instalador automatizado (nuevo)
+├── uninstall.sh             # Desinstalador (nuevo)
+├── spacefn-auto.service     # Servicio systemd (nuevo)
+├── 99-spacefn-keyboards.rules # Reglas udev opcionales (nuevo)
+├── README.md                # Documentación
+├── LICENSE.md               # Licencia (original: dominio público, modificaciones: MIT)
+└── .gitignore               # Configuración de Git
 ```
 
 ## 📊 Logs y Debugging
@@ -121,22 +126,39 @@ ls -la /dev/input/by-id/ | grep kbd
 
 ## 🔄 Diferencias con el proyecto original
 
-Esta versión incluye mejoras significativas sobre el spacefn-evdev original:
+Esta versión incluye mejoras significativas sobre el [spacefn-evdev original de James Laird-Wah](https://github.com/abrasive/spacefn-evdev):
 
-1. **Gestión automática de múltiples teclados**
-2. **Instalación automatizada de dependencias**
-3. **Servicio systemd para inicio automático**
-4. **Sistema de logging centralizado**
-5. **Scripts de gestión avanzados**
-6. **Detección inteligente de dispositivos**
+### ✨ **Nuevas características**:
+1. **Gestión automática de múltiples teclados** - El original solo maneja un teclado
+2. **Instalación automatizada de dependencias** - El original requiere instalación manual
+3. **Servicio systemd para inicio automático** - El original no incluye gestión de servicios
+4. **Sistema de logging centralizado** - El original no tiene logs organizados
+5. **Scripts de gestión avanzados** - El original solo tiene el binario básico
+6. **Detección inteligente de dispositivos** - El original requiere especificar el dispositivo manualmente
+
+### �️ **Código base**:
+- El núcleo de `spacefn.c` mantiene la lógica original de James Laird-Wah
+- Se agregaron scripts de automatización y gestión (`spacefn-auto.sh`, `install.sh`, `uninstall.sh`)
+- Se mejoró la experiencia de usuario con instalación y configuración automática
 
 ## 📜 Licencia
 
-Este proyecto mantiene la licencia del proyecto original. Ver `LICENSE.md`.
+- **Código original**: Dominio público (James Laird-Wah, 2018)
+- **Modificaciones y mejoras**: MIT License (Brandon Trigueros, 2025)
+
+Ver `LICENSE.md` para detalles completos.
 
 ## 🙏 Reconocimientos
 
-Basado en el proyecto original [spacefn-evdev](https://github.com/abrasive/spacefn-evdev) por James Laird-Wah.
+### Autor Original
+- **James Laird-Wah** ([@abrasive](https://github.com/abrasive))
+- **Repositorio original**: https://github.com/abrasive/spacefn-evdev
+- **Año**: 2018
+- **Concepto**: Implementación de SpaceFn para Linux usando evdev
+
+### Modificaciones
+- **Brandon Trigueros** - Automatización, gestión multi-teclado, y mejoras de UX
+- **Año**: 2025
 
 ## 🐛 Solución de problemas
 

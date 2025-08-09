@@ -66,7 +66,10 @@ echo "2. Compilando spacefn..."
 if [[ ! -f "$SPACEFN_DIR/spacefn" ]]; then
     echo "Compilando binario spacefn..."
     cd "$SPACEFN_DIR"
-    make
+    
+    # Compilar directamente con pkg-config
+    cc `pkg-config --cflags libevdev` spacefn.c -o spacefn `pkg-config --libs libevdev`
+    
     if [[ $? -ne 0 ]]; then
         echo "ERROR: No se pudo compilar spacefn"
         echo "Verifica que las dependencias estén correctamente instaladas"

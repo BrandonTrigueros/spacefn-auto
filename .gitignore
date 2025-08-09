@@ -3,22 +3,17 @@ spacefn
 *.o
 *.so
 
-# Archivos temporales
+# Archivos temporales del editor
 *.swp
 *.swo
 *~
 
-# Logs y archivos de runtime
+# Logs y archivos de runtime (estos se crean en /var/)
 *.log
 *.pid
 
-# Archivos del sistema (no versionar)
-/var/log/spacefn/
-/var/run/spacefn/
-
 # Archivos de backup
 *.backup.*
-*~
 
 # IDE files
 .vscode/
@@ -27,3 +22,7 @@ spacefn
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# No versionar directorios del sistema
+# (estos se crean automáticamente en /var/)
+var/

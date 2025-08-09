@@ -1,7 +1,12 @@
 /*
  * spacefn-evdev.c
- * James Laird-Wah (abrasive) 2018
- * This code is in the public domain.
+ * 
+ * Original author: James Laird-Wah (abrasive) 2018
+ * Original repository: https://github.com/abrasive/spacefn-evdev
+ * Original code is in the public domain.
+ * 
+ * Modified for SpaceFn-Evdev Auto by Brandon Trigueros 2025
+ * Modifications released under MIT License
  */
 
 #include <libevdev/libevdev.h>
