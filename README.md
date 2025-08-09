@@ -1,8 +1,24 @@
 # SpaceFn-Evdev Auto
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Based on](https://img.shields.io/badge/Based%20on-spacefn--evdev-blue.svg)](https://github.com/abrasive/spacefn-evdev)
+[![Platform](https://img.shields.io/badge/Platform-Linux-green.svg)](https://www.linux.org/)
+[![GitHub release](https://img.shields.io/github/v/release/BrandonTrigueros/spacefn-auto)](https://github.com/BrandonTrigueros/spacefn-auto/releases)
+
 Una versión mejorada y automatizada de [spacefn-evdev](https://github.com/abrasive/spacefn-evdev) con detección automática de múltiples teclados y gestión avanzada de procesos.
 
 > **⚠️ Importante**: Este proyecto está basado en el trabajo original de **James Laird-Wah** ([@abrasive](https://github.com/abrasive)). El repositorio original se encuentra en: https://github.com/abrasive/spacefn-evdev
+
+## ⚡ Instalación rápida
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/BrandonTrigueros/spacefn-auto.git
+cd spacefn-auto
+
+# Instalación automática
+./install.sh
+```
 
 ## 🚀 Características
 
