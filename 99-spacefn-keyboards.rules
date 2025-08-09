@@ -1,0 +1,5 @@
+# Regla udev simplificada para detectar teclados
+# Solo activa en ADD, no en REMOVE para evitar bucles
+
+# Detectar teclados USB cuando se conectan
+SUBSYSTEM=="input", ENV{ID_INPUT_KEYBOARD}=="1", ACTION=="add", RUN+="/bin/bash -c 'sleep 2 && /home/brandontrigueros/spacefn-evdev/spacefn-auto.sh restart > /dev/null 2>&1 &'"

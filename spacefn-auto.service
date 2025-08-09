@@ -1,0 +1,20 @@
+[Unit]
+Description=SpaceFn Auto - Space key modifier for all keyboards
+After=multi-user.target
+Wants=multi-user.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=root
+ExecStart=/home/brandontrigueros/spacefn-evdev/spacefn-auto.sh start
+ExecStop=/home/brandontrigueros/spacefn-evdev/spacefn-auto.sh stop
+ExecReload=/home/brandontrigueros/spacefn-evdev/spacefn-auto.sh restart
+Restart=on-failure
+RestartSec=5
+
+# Permitir acceso a dispositivos de input
+SupplementaryGroups=input
+
+[Install]
+WantedBy=multi-user.target

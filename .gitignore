@@ -1,0 +1,29 @@
+# Binarios compilados
+spacefn
+*.o
+*.so
+
+# Archivos temporales
+*.swp
+*.swo
+*~
+
+# Logs y archivos de runtime
+*.log
+*.pid
+
+# Archivos del sistema (no versionar)
+/var/log/spacefn/
+/var/run/spacefn/
+
+# Archivos de backup
+*.backup.*
+*~
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
