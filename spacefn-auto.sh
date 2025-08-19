@@ -64,26 +64,40 @@ start_all() {
     
     # Buscar todos los dispositivos de teclado
     local keyboards=()
+    
+    # Primero buscar en /dev/input/by-id/
     while IFS= read -r -d '' device; do
         keyboards+=("$device")
     done < <(find /dev/input/by-id/ -name "*kbd" -print0 2>/dev/null)
     
-    if [[ ${#keyboards[@]} -eq 0 ]]; then
-        log "No se encontraron teclados en /dev/input/by-id/"
-        # Buscar en /dev/input/eventX como fallback
-        log "Buscando teclados en /dev/input/event*..."
-        for event_device in /dev/input/event*; do
-            if [[ -c "$event_device" ]]; then
-                # Verificar si es un teclado usando /proc/bus/input/devices
-                local event_num=$(basename "$event_device" | sed 's/event//')
-                if grep -A 10 "Handlers.*event$event_num" /proc/bus/input/devices | grep -q "kbd"; then
-                    local device_name=$(grep -B 5 "Handlers.*event$event_num" /proc/bus/input/devices | grep "Name=" | cut -d'"' -f2)
-                    keyboards+=("$event_device")
-                    log "Encontrado teclado: $device_name ($event_device)"
+    # También buscar en /dev/input/event* para teclados Bluetooth y otros
+    log "Buscando teclados adicionales en /dev/input/event*..."
+    for event_device in /dev/input/event*; do
+        if [[ -c "$event_device" ]]; then
+            # Verificar si es un teclado usando /proc/bus/input/devices
+            local event_num=$(basename "$event_device" | sed 's/event//')
+            if grep -A 10 "Handlers.*event$event_num" /proc/bus/input/devices | grep -q "kbd"; then
+                local device_name=$(grep -B 5 "Handlers.*event$event_num" /proc/bus/input/devices | grep "Name=" | cut -d'"' -f2)
+                
+                # Filtrar solo teclados reales (evitar dispositivos de sistema)
+                if [[ "$device_name" =~ [Kk]eyboard ]] || [[ "$device_name" =~ KB ]] || [[ "$device_name" =~ "AT Translated Set 2" ]]; then
+                    # Evitar duplicados - verificar si ya está en la lista
+                    local already_added=false
+                    for existing in "${keyboards[@]}"; do
+                        if [[ "$(readlink -f "$existing" 2>/dev/null)" == "$event_device" ]]; then
+                            already_added=true
+                            break
+                        fi
+                    done
+                    
+                    if [[ "$already_added" == false ]]; then
+                        keyboards+=("$event_device")
+                        log "Encontrado teclado: $device_name ($event_device)"
+                    fi
                 fi
             fi
-        done
-    fi
+        fi
+    done
     
     if [[ ${#keyboards[@]} -eq 0 ]]; then
         log "ERROR: No se encontraron dispositivos de teclado"
